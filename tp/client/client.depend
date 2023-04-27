@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1649253131 source:d:\2- enseignement 21-22\3-réseaux de communication\tp\code\client3\main.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1649255259 source:d:\2- enseignement 21-22\3-réseaux de communication\tp\code\clientfinal\main.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1679524225 source:d:\2-enseignement 22-23\3-réseaux de communication\tp\tp (client-serveur)\code\applicationclientserveur-v0\clientetud\main.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1680462077 source:d:\2-enseignement 22-23\3-réseaux de communication\tp\tp (client-serveur)\code\applicationclientserveur-v1\clientetud\main.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1680964294 source:d:\2-enseignement 22-23\3-réseaux de communication\tp\tp (client-serveur)\code\applicationclientserveur- a completer\clientetud\main.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

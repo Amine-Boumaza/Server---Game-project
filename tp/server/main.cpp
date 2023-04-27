@@ -1,7 +1,7 @@
 /** ------------------------------------------------------------------------------------------*
  *                                  c'est le code du serveur                                  *
- * programme réalisé par le docteur Brahimi said, chargé de cours réseaux de communication    *
- * 2eme année licence informatique, université 8 mai 1954 - Guelma (univ-guelma.dz)           *
+ * programme rï¿½alisï¿½ par le docteur Brahimi said, chargï¿½ de cours rï¿½seaux de communication    *
+ * 2eme annï¿½e licence informatique, universitï¿½ 8 mai 1954 - Guelma (univ-guelma.dz)           *
  *-------------------------------------------------------------------------------------------**/
 
 #include <winsock2.h>
@@ -12,21 +12,21 @@
 
 
 /**===========================================================================================*
- *                       variabble globbale --> à ne pas changer                              *
+ *                       variabble globbale --> ï¿½ ne pas changer                              *
  *--------------------------------------------------------------------------------------------*/
 #define LG_MESSAGE 256
 #define PORT 1977
-#define ATTEND_ADVERSAIRE     "1" /* envoyé au premier joueur */
-#define VEILLEZ_JOUER         "2" /* envoyé au premier joueur */
-#define MANIPULATION_OK       "3" /* envoyé au joueur qui fait manipulation correct*/
-#define MAUVAISE_MANIPULATION "4" /* envoyé au joueur qui fait mauvaise manipulation */
-#define TU_A_GAGNE            "5" /* envoyé au joueur qui fait mauvaise manipulation */
-#define ECHEC                 "6" /* envoyé au joueur qui a échoué */
-#define ADVERSAIRE_DECONNECTE "7" /* envoyé au joueur si son adversaire est déconnecté  */
+#define ATTEND_ADVERSAIRE     "1" /* envoyï¿½ au premier joueur */
+#define VEILLEZ_JOUER         "2" /* envoyï¿½ au premier joueur */
+#define MANIPULATION_OK       "3" /* envoyï¿½ au joueur qui fait manipulation correct*/
+#define MAUVAISE_MANIPULATION "4" /* envoyï¿½ au joueur qui fait mauvaise manipulation */
+#define TU_A_GAGNE            "5" /* envoyï¿½ au joueur qui fait mauvaise manipulation */
+#define ECHEC                 "6" /* envoyï¿½ au joueur qui a ï¿½chouï¿½ */
+#define ADVERSAIRE_DECONNECTE "7" /* envoyï¿½ au joueur si son adversaire est dï¿½connectï¿½  */
 
-SOCKET socketEcoute;    /* utilisé seulement pour la réception des demmandes de connexion  */
-SOCKET socketDialogue1; /* utilisé pour la communication avec le premier joueur */
-SOCKET socketDialogue2; /* utilisé pour la communication avec le deuxième joueur */
+SOCKET socketEcoute;    /* utilisï¿½ seulement pour la rï¿½ception des demmandes de connexion  */
+SOCKET socketDialogue1; /* utilisï¿½ pour la communication avec le premier joueur */
+SOCKET socketDialogue2; /* utilisï¿½ pour la communication avec le deuxiï¿½me joueur */
 char derniere_action_jeu[LG_MESSAGE];  // nom du 1er joueur
 char nomJ1[LG_MESSAGE];  // nom du 1er joueur
 char nomJ2[LG_MESSAGE];  // nom du 2eme joueur
@@ -34,9 +34,9 @@ int etat_de_connexion ;
 int Gril_jeu[3][3];
 
 /****************************************************************************************
- *   initialisation et fermeture de la bibiothèque de de communication WinSock          *
+ *   initialisation et fermeture de la bibiothï¿½que de de communication WinSock          *
  ****************************************************************************************/
- void init_bib(){    /*  initialisation  --- à ne pas changer */
+ void init_bib(){    /*  initialisation  --- ï¿½ ne pas changer */
     WSADATA WSAData;
     WSAStartup(MAKEWORD(2,0), &WSAData);
  }
@@ -45,13 +45,13 @@ int Gril_jeu[3][3];
     WSACleanup();
  }
  /****************************************************************************************
- * creation et configuration du socket d'éccoute qui va permettre au serveur de recevoir *
+ * creation et configuration du socket d'ï¿½ccoute qui va permettre au serveur de recevoir *
  * les demandes de connexion des clients (joueurs)                                       *
  *****************************************************************************************/
  int creer_socket_ecoute(SOCKET * sockEcoute){
-    // Crée un socket de communication
-    SOCKET  sockt = socket(AF_INET, SOCK_STREAM, 0); /* 0 indique que l’on utilisera
-                                                        le protocole par défaut associé à
+    // Crï¿½e un socket de communication
+    SOCKET  sockt = socket(AF_INET, SOCK_STREAM, 0); /* 0 indique que lï¿½on utilisera
+                                                        le protocole par dï¿½faut associï¿½ ï¿½
                                                         SOCK_STREAM soit TCP */
     if (sockt == INVALID_SOCKET){
         printf("Erreur de creation socket \n");
@@ -62,16 +62,16 @@ int Gril_jeu[3][3];
     return 1 ;
  }
 /*---------------------------------------------------*
- *  lier la socket à une adresse (bind)              *
+ *  lier la socket ï¿½ une adresse (bind)              *
  *---------------------------------------------------*/
  int socket_bind(SOCKET sockEcoute){
-    // On prépare l’adresse d’attachement locale
+    // On prï¿½pare lï¿½adresse dï¿½attachement locale
     struct sockaddr_in pointDeRencontreLocal; /* Renseigne la structure sockaddr_in avec les informations locales du serveur   */
 
     pointDeRencontreLocal.sin_family = AF_INET;
     pointDeRencontreLocal.sin_addr.s_addr = htonl(INADDR_ANY); // toutes les interfaces locales disponibles
 
-    // On choisit le numéro de port d’écoute du serveur
+    // On choisit le numï¿½ro de port dï¿½ï¿½coute du serveur
     pointDeRencontreLocal.sin_port = htons(PORT);
     int retour = bind(sockEcoute, (SOCKADDR *)&pointDeRencontreLocal, sizeof(pointDeRencontreLocal));
     if (retour == SOCKET_ERROR){
@@ -79,7 +79,7 @@ int Gril_jeu[3][3];
         return 0;
         }
     printf("Socket attachee avec succes !\n");
-    // On fixe la taille de la file d’attente (pour les demandes de connexion non encore traitées)
+    // On fixe la taille de la file dï¿½attente (pour les demandes de connexion non encore traitï¿½es)
     if (listen(sockEcoute, SOMAXCONN) == SOCKET_ERROR){
         printf("Erreur listen socket \n");
         return 0;
@@ -88,14 +88,14 @@ int Gril_jeu[3][3];
     return 1 ;
  }
 /*---------------------------------------------------*
- *  créer et configurer le socket d'écoute           *
- *  on utilise pour cela les 2 procedures précédentes*              *
+ *  crï¿½er et configurer le socket d'ï¿½coute           *
+ *  on utilise pour cela les 2 procedures prï¿½cï¿½dentes*              *
  *---------------------------------------------------*/
  int creation_et_configuration_socket_eccoute(SOCKET * socketEcoute){
-    /*socketEcoute est un socket utilisé seulement pour la réception des demmandes de connexion  */
+    /*socketEcoute est un socket utilisï¿½ seulement pour la rï¿½ception des demmandes de connexion  */
 
     int creation_reussite = creer_socket_ecoute(socketEcoute);
-    if( creation_reussite == 0 ) return 0 ;   /* problème de création de socket d'écoute */
+    if( creation_reussite == 0 ) return 0 ;   /* problï¿½me de crï¿½ation de socket d'ï¿½coute */
 
     int bind_correcte = socket_bind( * socketEcoute);
     if( bind_correcte == 0 ) return 0 ;
@@ -108,7 +108,7 @@ int Gril_jeu[3][3];
  *                              (fermeture des sockets)                                 *
  ****************************************************************************************/
 
- void fermeture_de_socket_Ecoute(SOCKET socktEcoute){ // à ne pas changer
+ void fermeture_de_socket_Ecoute(SOCKET socktEcoute){ // ï¿½ ne pas changer
     /* On ferme la ressource avant de quitter */
     int etat_de_fermeture = closesocket(socktEcoute);
     if (etat_de_fermeture == SOCKET_ERROR){
@@ -118,12 +118,12 @@ int Gril_jeu[3][3];
 
 /*-*************************************************************************************/
 
- void fermeture_de_socket_dialog(SOCKET sockDialogue){  // à ne pas changer
+ void fermeture_de_socket_dialog(SOCKET sockDialogue){  // ï¿½ ne pas changer
     int retour = closesocket(sockDialogue);
     if (retour == SOCKET_ERROR){
-        printf("Probleme de fermméture de connexion (erreur de fermeture de socket) \n");
+        printf("Probleme de fermmï¿½ture de connexion (erreur de fermeture de socket) \n");
         }
-    printf("Fermméture de connexion (fermeture de socket) \n");
+    printf("Fermmï¿½ture de connexion (fermeture de socket) \n");
  }
 
 /*-*************************************************************************************/
@@ -134,7 +134,7 @@ int Gril_jeu[3][3];
     struct sockaddr_in pointDeRencontreDistant;
     int longueurAdresse = sizeof(pointDeRencontreDistant);
 
-    /* acceppt : est un appel bloquant : on ne continue l'eéxution jusqu'à la connexion d'un client */
+    /* acceppt : est un appel bloquant : on ne continue l'eï¿½xution jusqu'ï¿½ la connexion d'un client */
     SOCKET  socktDialg = accept(sockEcoute, (SOCKADDR *)&pointDeRencontreDistant, & longueurAdresse);
 
     if (socktDialg == INVALID_SOCKET){
@@ -152,19 +152,19 @@ int Gril_jeu[3][3];
  ****************************************************************************************/
 
  int recevoir_message_de_client(SOCKET sockDialogue, char * buffer ) {
-    int nbr_octets_lus; /* nb d’octets ecrits et lus */
+    int nbr_octets_lus; /* nb dï¿½octets ecrits et lus */
     char message_a_recevoir[LG_MESSAGE]={0}; /* le message de la couche Application ! */
 
-    // réception d'un message de client
+    // rï¿½ception d'un message de client
     nbr_octets_lus = recv(sockDialogue, message_a_recevoir, sizeof(message_a_recevoir), 0);
 
-    if( nbr_octets_lus > 0 ) {     /* réception coorecte de n octets */
+    if( nbr_octets_lus > 0 ) {     /* rï¿½ception coorecte de n octets */
         printf("message recu :\"%s\"\n", message_a_recevoir);
         strcpy(buffer, message_a_recevoir) ;
         return 1;  // retoure dans le cas d'une reception correcte d'un mess&ge de
         }
-    // le cas où le serveur ne peut pas recevoir de mmessage
-    if( nbr_octets_lus == 0 ) /* on ne peut pas recevoir d'informmation car le socket est fermée par le serveur */
+    // le cas oï¿½ le serveur ne peut pas recevoir de mmessage
+    if( nbr_octets_lus == 0 ) /* on ne peut pas recevoir d'informmation car le socket est fermï¿½e par le serveur */
         printf("Connexion avec le Client s'est fermee (socket fermee)\n");
     else /* on ne peut pas recevoir d'informmation car il y a une erreur quelque part ! */
         printf("Probleme de communication avec le Client (Erreur lecture socket) \n" );
@@ -174,11 +174,11 @@ int Gril_jeu[3][3];
 /*-*************************************************************************************/
  int envoyer_message_au_client(SOCKET sockDialogue, const char message_a_envoyer[]){
     int  nbr_octets_envoyes ;
-    nbr_octets_envoyes = send(sockDialogue, message_a_envoyer, (int)strlen(message_a_envoyer), 0); // message à TAILLE variable
+    nbr_octets_envoyes = send(sockDialogue, message_a_envoyer, (int)strlen(message_a_envoyer), 0); // message ï¿½ TAILLE variable
     if (nbr_octets_envoyes == SOCKET_ERROR){
         printf("Probleme d'envoi du message au client (Erreur envoi sur socket)\n");
 
-        // dans les deux cas d'erreur, le serveurs vas se déconnecter
+        // dans les deux cas d'erreur, le serveurs vas se dï¿½connecter
         return 0;
     }
     printf("le message \"%s\" envoye au client avec succes \n\n", message_a_envoyer);
@@ -208,7 +208,7 @@ void extraire_place(char * message_a_recevoir, int *x, int *y) {
 /*-**************************************************************************************/
 
 void extraire_deplacement(char* message_a_recevoir, int* xs, int* ys, int* xc, int* yc) {
-  /** A compléter    **/
+  /** A complï¿½ter    **/
   *xs=0 ; *ys=0 ; *xc=0; *yc=0;
   if((strlen(message_a_recevoir)==7)&(message_a_recevoir[1]==' ')&(message_a_recevoir[3]==' ')
      &(message_a_recevoir[5]==' ')){
@@ -241,7 +241,7 @@ void extraire_deplacement(char* message_a_recevoir, int* xs, int* ys, int* xc, i
 /*-**************************************************************************************/
 
  int deplacement_valide(int joueur, int xs, int ys, int xc, int yc){
-  /** A compléter    **/
+  /** A complï¿½ter    **/
 
   if(xs==0 || ys==0 || xc==0 || yc==0) return 0;
   else
@@ -259,7 +259,7 @@ void extraire_deplacement(char* message_a_recevoir, int* xs, int* ys, int* xc, i
 }
 
 int placement_valide(int x,int y){
-  /** A compléter    **/
+  /** A complï¿½ter    **/
   if(x==0 || y==0) return 0;
   else
   {
@@ -280,7 +280,7 @@ int placement_valide(int x,int y){
 /*-**************************************************************************************/
 
  int mettre_a_jeur_gril(int joueur, int x, int y){
-  /** A compléter    **/
+  /** A complï¿½ter    **/
   if(placement_valide(x,y)==0)return 0;
   Gril_jeu[x-1][y-1]=joueur;
   return 1;
@@ -321,9 +321,9 @@ int est_dans_un_ligne(int joueur,int x,int y)
 }
 
 int qui_est_gagnant(){
-  /** A compléter
+  /** A complï¿½ter
       analyser le contenu de la gril pour savoir quel joueur
-      est arrivé a aligner ses trois pièces
+      est arrivï¿½ a aligner ses trois piï¿½ces
   **/
 
 
@@ -341,61 +341,61 @@ int qui_est_gagnant(){
 /*-**************************************************************************************/
 
  int initialisation_du_jeu(){
-    /* phase d'attente de l'établissemment de connextion du premier joueur  */
+    /* phase d'attente de l'ï¿½tablissemment de connextion du premier joueur  */
     printf("Attendre la connexion du premier joueur ... \n\n");
     int etat_de_connexion = connexion_d_un_client(socketEcoute, & socketDialogue1) ;
-    if( etat_de_connexion == 0 ) return 0 ;   /* quiter l'exécution car il y a un problème de connexion */
-    /* dans le cas de connexion réussite d'un client - 1er joueur s'est connecté
-       alors on attend l'arrivé d'un message portant le nom de ce premier joueur    */
+    if( etat_de_connexion == 0 ) return 0 ;   /* quiter l'exï¿½cution car il y a un problï¿½me de connexion */
+    /* dans le cas de connexion rï¿½ussite d'un client - 1er joueur s'est connectï¿½
+       alors on attend l'arrivï¿½ d'un message portant le nom de ce premier joueur    */
     printf("attendre le message portant le nom du 1er joueur ... \n");
     int etat_reception = recevoir_message_de_client(socketDialogue1, nomJ1);
     if( etat_reception == 0 )  return 0 ;   /* il y a une erreur lors de la reception du message */
 
-    /* dans le cas où il y a une reception correcte d'un message portant le nom du 1er joueur
-       alors, le serveur répond au client par un message demandant au 1er joueur
-       d'attendre l'arrivé du 2eme joueur, ce message porte le code "1" */
+    /* dans le cas oï¿½ il y a une reception correcte d'un message portant le nom du 1er joueur
+       alors, le serveur rï¿½pond au client par un message demandant au 1er joueur
+       d'attendre l'arrivï¿½ du 2eme joueur, ce message porte le code "1" */
     printf("envoyer un message au 1er joueur indicant qu'il est le premier... \n ");  //  Tu va attendre l'arrive de ton Adversaaire ...\n
     int etat_envoi = envoyer_message_au_client(socketDialogue1, ATTEND_ADVERSAIRE ) ;
-    if( etat_envoi == 0 )  return 0 ;   /* quitter l'exécution car il y a une erreur lors de l'envoi du message */
+    if( etat_envoi == 0 )  return 0 ;   /* quitter l'exï¿½cution car il y a une erreur lors de l'envoi du message */
 
-    /* phase d'attente de l'établissemment de connextion du deuxième joueur  */
+    /* phase d'attente de l'ï¿½tablissemment de connextion du deuxiï¿½me joueur  */
     printf("attendre la connexion du 2eme joueur ... \n");
     etat_de_connexion = connexion_d_un_client(socketEcoute, & socketDialogue2) ;
-    if( etat_de_connexion == 0 ) return 0 ;   /* quiter l'exécution car il y a un problème de connexion */
+    if( etat_de_connexion == 0 ) return 0 ;   /* quiter l'exï¿½cution car il y a un problï¿½me de connexion */
 
-    /* dans le cas de connexion réussite d'un autre client - 2er joueur s'est connecté
-       alors on attent l'arrivé d'un message portant le nom de ce deuxième joueur -   */
+    /* dans le cas de connexion rï¿½ussite d'un autre client - 2er joueur s'est connectï¿½
+       alors on attent l'arrivï¿½ d'un message portant le nom de ce deuxiï¿½me joueur -   */
     printf("attente le message portant le nom du 2eme joueur ... \n");
     etat_reception = recevoir_message_de_client(socketDialogue2, nomJ2);
     if( etat_reception == 0 )  return 0 ;   /* il y a une erreur lors de la reception du message */
-    /* dans le cas où il y a une reception correcte du message portant le nom du joueur 2
-       alors, le serveur répond au client par un mmessage d'accueil   */
+    /* dans le cas oï¿½ il y a une reception correcte du message portant le nom du joueur 2
+       alors, le serveur rï¿½pond au client par un mmessage d'accueil   */
     printf("Envoi d'un message au 2eme joueur portant le nom du 1er joueur... \n");
     etat_envoi = envoyer_message_au_client(socketDialogue2, nomJ1) ;
-    if( etat_envoi == 0 )  return 0 ;   /* quitter l'exécution car il y a une erreur lors de l'envoi du message */
+    if( etat_envoi == 0 )  return 0 ;   /* quitter l'exï¿½cution car il y a une erreur lors de l'envoi du message */
 
     printf("Envoi d'un message au 1er joueur portant le nom du 2eme joueur... \n");
     etat_envoi = envoyer_message_au_client(socketDialogue1, nomJ2) ;
-    if( etat_envoi == 0 )  return 0 ;   /* quitter l'exécution car il y a une erreur lors de l'envoi du message */
+    if( etat_envoi == 0 )  return 0 ;   /* quitter l'exï¿½cution car il y a une erreur lors de l'envoi du message */
     return 1;
 }
 
 /*-**************************************************************************************/
 
 int placement_une_piece(SOCKET socketDialogue , int joueur){
-    /** A compléter
-        contrôler le placeent correcte d'une pièce d'un joueur détermminé (le 1er ou le 2eme
+    /** A complï¿½ter
+        contrï¿½ler le placeent correcte d'une piï¿½ce d'un joueur dï¿½termminï¿½ (le 1er ou le 2eme
 
         ce serveur
-        - donne l'ordre à un joueur pour placer un pièce dans la gril
+        - donne l'ordre ï¿½ un joueur pour placer un piï¿½ce dans la gril
         - reception de l'action de jeu de ce joueur
         - la confirmer que cette action (de placement) du joueur est valide ou nom
 
         retourne :
-        0 : en cas de problème de communication
-        1 : si le joueur arrive (apres avoir anlyser son action de jeu) à bien positionner sa pièce
-        2 : si le joueur n'arrive pas (apres avoir anlyser son action de jeu) à bien positionner sa
-            pièce ou si il n'arrive pas à exprimmer en trois tentive une placement correcte.
+        0 : en cas de problï¿½me de communication
+        1 : si le joueur arrive (apres avoir anlyser son action de jeu) ï¿½ bien positionner sa piï¿½ce
+        2 : si le joueur n'arrive pas (apres avoir anlyser son action de jeu) ï¿½ bien positionner sa
+            piï¿½ce ou si il n'arrive pas ï¿½ exprimmer en trois tentive une placement correcte.
     **/
     int x,y,tentive=0;
 
@@ -441,21 +441,21 @@ int placement_une_piece(SOCKET socketDialogue , int joueur){
 
  int placement_des_pieces(){
 
-     /** A compléter
+     /** A complï¿½ter
       ici c'est la phase qui permet au serveur de controler et gerer le placement correcte
-      des (trois) pièces des deux joueurs à l'alternat.
+      des (trois) piï¿½ces des deux joueurs ï¿½ l'alternat.
 
       le serveur utilise pour cela utilise la matrice representant la gril global. il
       - la valide l'action de chaque joueur
-      - la reconnaissance de vinqueur après chaque action de chaque joueur
+      - la reconnaissance de vinqueur aprï¿½s chaque action de chaque joueur
 
       retourne :
-        0 : en cas de problème de communication
-        1 : si les deux joueur arrivent à bien positionner leurs 3 pièces
-        2 : un joueur arrive à placer ces 3 pièces alignées (il est déclaré
-            vinqueur et son adversaire non) ou un joueur n'arrive pas à bien
-            placer une pièce parmis les trois en trois tentive (son adversaire
-            est dans ce cas déclaré vinqueur)
+        0 : en cas de problï¿½me de communication
+        1 : si les deux joueur arrivent ï¿½ bien positionner leurs 3 piï¿½ces
+        2 : un joueur arrive ï¿½ placer ces 3 piï¿½ces alignï¿½es (il est dï¿½clarï¿½
+            vinqueur et son adversaire non) ou un joueur n'arrive pas ï¿½ bien
+            placer une piï¿½ce parmis les trois en trois tentive (son adversaire
+            est dans ce cas dï¿½clarï¿½ vinqueur)
       **/
 
       int nb_pieces_placee_J1=0, nb_pieces_placee_J2=0;
@@ -538,21 +538,21 @@ int placement_une_piece(SOCKET socketDialogue , int joueur){
 /*-**************************************************************************************/
 
  int deplacement_une_piece(SOCKET socketDialogue , int joueur){
-    /** A compléter
+    /** A complï¿½ter
       ici c'est la phase qui permet au serveur de controler et gerer le deplacement correcte
-      d'une (seule) pièce des deux joueurs à l'alternat.
+      d'une (seule) piï¿½ce des deux joueurs ï¿½ l'alternat.
 
       le serveur utilise pour cela la matrice representant la gril global. il
-      - donne l'ordre à un joueur pour deplacer un pièce dans la gril
-      - reception de l'action de deplacement d'un joueur déterminé et la valide
-      - reconnait le joueur qui n'arrive pas faire un déplacement correcte dans 3 tentatives
+      - donne l'ordre ï¿½ un joueur pour deplacer un piï¿½ce dans la gril
+      - reception de l'action de deplacement d'un joueur dï¿½terminï¿½ et la valide
+      - reconnait le joueur qui n'arrive pas faire un dï¿½placement correcte dans 3 tentatives
       - la confirmer que cette action (de deplacement) du joueur est valide ou nom
 
       retourne :
-        0 : en cas de problème de communication
-        1 : si le joueur arrive (apres avoir anlyser son action de jeu) à bien deplacer sa pièce
-        2 : si le joueur n'arrive pas (apres avoir anlyser son action de jeu) à bien deplacer sa
-            pièce ou si il n'arrive pas à exprimmer en trois tentive un deplacement correcte.
+        0 : en cas de problï¿½me de communication
+        1 : si le joueur arrive (apres avoir anlyser son action de jeu) ï¿½ bien deplacer sa piï¿½ce
+        2 : si le joueur n'arrive pas (apres avoir anlyser son action de jeu) ï¿½ bien deplacer sa
+            piï¿½ce ou si il n'arrive pas ï¿½ exprimmer en trois tentive un deplacement correcte.
       **/
       int xs,ys,xc,yc,tentive=0;
 
@@ -597,20 +597,20 @@ int placement_une_piece(SOCKET socketDialogue , int joueur){
 /*-**************************************************************************************/
 
  int deplacement_des_pieces(){
-     /** A compléter
+     /** A complï¿½ter
       ici c'est la phase qui permet au serveur de controler et gerer le deplacement correcte
-      des pièces des deux joueurs à l'alternat.
+      des piï¿½ces des deux joueurs ï¿½ l'alternat.
 
       le serveur utilise pour cela utilise la matrice representant la gril global. il
       - la valide l'action de chaque joueur
-      - la reconnaissance de vinqueur après chaque action de chaque joueur
+      - la reconnaissance de vinqueur aprï¿½s chaque action de chaque joueur
 
       retourne :
-        0 : en cas de problème de communication
-        1 : cas d'un vinqueur - si un des deux joueurs arrive à bien aligner ses 3 pièces(il est déclaré
-            vinqueur et son adversaire non) ou un joueur n'arrive pas à bien
-            deplacer une pièce en trois tentive (son adversaire
-            est dans ce cas déclaré vinqueur)
+        0 : en cas de problï¿½me de communication
+        1 : cas d'un vinqueur - si un des deux joueurs arrive ï¿½ bien aligner ses 3 piï¿½ces(il est dï¿½clarï¿½
+            vinqueur et son adversaire non) ou un joueur n'arrive pas ï¿½ bien
+            deplacer une piï¿½ce en trois tentive (son adversaire
+            est dans ce cas dï¿½clarï¿½ vinqueur)
       **/
       int etat_jeu, joueur=1;
       int est_gagnat=0;
@@ -666,9 +666,10 @@ int placement_une_piece(SOCKET socketDialogue , int joueur){
       if(est_gagnat==1)
       {
             etat_de_connexion=envoyer_message_au_client(socketDialogue1,TU_A_GAGNE);
-            if(etat_de_connexion==0) return 0;            etat_de_connexion=envoyer_message_au_client(socketDialogue2,ECHEC);
             if(etat_de_connexion==0) return 0;
-      }
+            etat_de_connexion=envoyer_message_au_client(socketDialogue2,ECHEC);
+            if(etat_de_connexion==0) return 0;
+    }
       else
       {
             etat_de_connexion=envoyer_message_au_client(socketDialogue2,TU_A_GAGNE);
@@ -685,13 +686,13 @@ int placement_une_piece(SOCKET socketDialogue , int joueur){
     if(initialisation_du_jeu()==0) return 0;
     initialiser_gril();
 
-    /* phase de placement des pièces */
+    /* phase de placement des piï¿½ces */
     int termminer = placement_des_pieces() ;
     if(termminer !=1) return 0;
 
-    /* phase de déplacement des pièces */
+    /* phase de dï¿½placement des piï¿½ces */
     deplacement_des_pieces() ;
-    /* se déconnecter  */
+    /* se dï¿½connecter  */
     fermeture_de_socket_dialog(socketDialogue1);
     fermeture_de_socket_dialog(socketDialogue2);
     return 1 ;
@@ -700,13 +701,13 @@ int placement_une_piece(SOCKET socketDialogue , int joueur){
 /**************************************************************************************/
 
 int main(){
-    /* initilaiser et lancer l’utilisation de la iliotheque de communication  */
+    /* initilaiser et lancer lï¿½utilisation de la iliotheque de communication  */
     init_bib();
     /* attacher le serveur avec la couche de transport   */
     int creation_reussite = creation_et_configuration_socket_eccoute(&socketEcoute);
-    if( creation_reussite == 0 ) return 0 ;   /* quiter l'exécution car il y a un problème de création de socket d'écoute */
+    if( creation_reussite == 0 ) return 0 ;   /* quiter l'exï¿½cution car il y a un problï¿½me de crï¿½ation de socket d'ï¿½coute */
     while(true) gerer_un_jeu() ;
-    /* termine l’utilisation de la iliotheque de communication  */
+    /* termine lï¿½utilisation de la iliotheque de communication  */
     fermeture_de_socket_Ecoute(socketEcoute);
     fermer_bib() ;
     getchar();

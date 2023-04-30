@@ -40,3 +40,9 @@
 	<stdio.h>
 	<stdlib.h>
 
+1682673476 source:c:\users\bouma\onedrive\desktop\reseau project\tp\server\main.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<stdio.h>
+	<stdlib.h>
+

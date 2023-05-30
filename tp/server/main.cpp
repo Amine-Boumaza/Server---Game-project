@@ -381,10 +381,6 @@ int est_dans_un_ligne(int joueur, int x, int y)
 
 int qui_est_gagnant()
 {
-    /** A compl�ter
-        analyser le contenu de la gril pour savoir quel joueur
-        est arriv� a aligner ses trois pi�ces
-    **/
 
     for (int x = 0; x < 3; x++)
     {
@@ -451,20 +447,7 @@ int initialisation_du_jeu()
 
 int placement_une_piece(SOCKET socketDialogue, int joueur)
 {
-    /** A compl�ter
-        contr�ler le placeent correcte d'une pi�ce d'un joueur d�termmin� (le 1er ou le 2eme
 
-        ce serveur
-        - donne l'ordre � un joueur pour placer un pi�ce dans la gril
-        - reception de l'action de jeu de ce joueur
-        - la confirmer que cette action (de placement) du joueur est valide ou nom
-
-        retourne :
-        0 : en cas de probl�me de communication
-        1 : si le joueur arrive (apres avoir anlyser son action de jeu) � bien positionner sa pi�ce
-        2 : si le joueur n'arrive pas (apres avoir anlyser son action de jeu) � bien positionner sa
-            pi�ce ou si il n'arrive pas � exprimmer en trois tentive une placement correcte.
-    **/
     int x, y, tentive = 0;
 
     etat_de_connexion = envoyer_message_au_client(socketDialogue, VEILLEZ_JOUER);
@@ -518,23 +501,6 @@ int placement_une_piece(SOCKET socketDialogue, int joueur)
 int placement_des_pieces()
 {
 
-    /** A compl�ter
-     ici c'est la phase qui permet au serveur de controler et gerer le placement correcte
-     des (trois) pi�ces des deux joueurs � l'alternat.
-
-     le serveur utilise pour cela utilise la matrice representant la gril global. il
-     - la valide l'action de chaque joueur
-     - la reconnaissance de vinqueur apr�s chaque action de chaque joueur
-
-     retourne :
-       0 : en cas de probl�me de communication
-       1 : si les deux joueur arrivent � bien positionner leurs 3 pi�ces
-       2 : un joueur arrive � placer ces 3 pi�ces align�es (il est d�clar�
-           vinqueur et son adversaire non) ou un joueur n'arrive pas � bien
-           placer une pi�ce parmis les trois en trois tentive (son adversaire
-           est dans ce cas d�clar� vinqueur)
-     **/
-
     int nb_pieces_placee_J1 = 0, nb_pieces_placee_J2 = 0;
 
     int joueur = 1, etat_jeu;
@@ -556,9 +522,9 @@ int placement_des_pieces()
         if (etat_jeu == 2)
         {
             if (joueur == 1)
-                etat_de_connexion = envoyer_message_au_client(socketDialogue1, TU_A_GAGNE);
-            else
                 etat_de_connexion = envoyer_message_au_client(socketDialogue2, TU_A_GAGNE);
+            else
+                etat_de_connexion = envoyer_message_au_client(socketDialogue1, TU_A_GAGNE);
             if (etat_de_connexion == 0)
                 return 0;
 
@@ -621,22 +587,7 @@ int placement_des_pieces()
 
 int deplacement_une_piece(SOCKET socketDialogue, int joueur)
 {
-    /** A compl�ter
-      ici c'est la phase qui permet au serveur de controler et gerer le deplacement correcte
-      d'une (seule) pi�ce des deux joueurs � l'alternat.
 
-      le serveur utilise pour cela la matrice representant la gril global. il
-      - donne l'ordre � un joueur pour deplacer un pi�ce dans la gril
-      - reception de l'action de deplacement d'un joueur d�termin� et la valide
-      - reconnait le joueur qui n'arrive pas faire un d�placement correcte dans 3 tentatives
-      - la confirmer que cette action (de deplacement) du joueur est valide ou nom
-
-      retourne :
-        0 : en cas de probl�me de communication
-        1 : si le joueur arrive (apres avoir anlyser son action de jeu) � bien deplacer sa pi�ce
-        2 : si le joueur n'arrive pas (apres avoir anlyser son action de jeu) � bien deplacer sa
-            pi�ce ou si il n'arrive pas � exprimmer en trois tentive un deplacement correcte.
-      **/
     int xs, ys, xc, yc, tentive = 0;
 
     etat_de_connexion = envoyer_message_au_client(socketDialogue, VEILLEZ_JOUER);
@@ -689,21 +640,7 @@ int deplacement_une_piece(SOCKET socketDialogue, int joueur)
 
 int deplacement_des_pieces()
 {
-    /** A compl�ter
-     ici c'est la phase qui permet au serveur de controler et gerer le deplacement correcte
-     des pi�ces des deux joueurs � l'alternat.
 
-     le serveur utilise pour cela utilise la matrice representant la gril global. il
-     - la valide l'action de chaque joueur
-     - la reconnaissance de vinqueur apr�s chaque action de chaque joueur
-
-     retourne :
-       0 : en cas de probl�me de communication
-       1 : cas d'un vinqueur - si un des deux joueurs arrive � bien aligner ses 3 pi�ces(il est d�clar�
-           vinqueur et son adversaire non) ou un joueur n'arrive pas � bien
-           deplacer une pi�ce en trois tentive (son adversaire
-           est dans ce cas d�clar� vinqueur)
-     **/
     int etat_jeu, joueur = 1;
     int est_gagnat = 0;
 
@@ -724,9 +661,9 @@ int deplacement_des_pieces()
         if (etat_jeu == 2)
         {
             if (joueur == 1)
-                etat_de_connexion = envoyer_message_au_client(socketDialogue1, TU_A_GAGNE);
-            else
                 etat_de_connexion = envoyer_message_au_client(socketDialogue2, TU_A_GAGNE);
+            else
+                etat_de_connexion = envoyer_message_au_client(socketDialogue1, TU_A_GAGNE);
             if (etat_de_connexion == 0)
                 return 0;
 

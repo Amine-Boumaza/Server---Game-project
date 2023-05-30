@@ -219,7 +219,7 @@ void afficher_scord(int sc)
 
 /****************************************************************************************
  *                                  Gestion de jeu                                       *
- *****************************************************************************************/
+ ***************************************************************************************b**/
 
 void extraire_place(char *message_a_recevoir, int *x, int *y)
 {
@@ -287,11 +287,11 @@ void extraire_deplacement(char *message_a_recevoir, int *xs, int *ys, int *xc, i
         }
         if (*xc != 0)
         {
-            if (message_a_recevoir[2] == '1')
+            if (message_a_recevoir[6] == '1')
                 *yc = 1;
-            else if (message_a_recevoir[2] == '2')
+            else if (message_a_recevoir[6] == '2')
                 *yc = 2;
-            else if (message_a_recevoir[2] == '3')
+            else if (message_a_recevoir[6] == '3')
                 *yc = 3;
         }
     }
@@ -366,10 +366,7 @@ void mettre_a_jeur_gril(int xs, int ys, int xc, int yc)
 
 void mettre_a_jeur_gril(char type, int x, int y)
 {
-    /** A compl�ter
-        ici on met � jour la gril local
-        on met X ou O dans la gril local selon le "type"
-    **/
+
     Gril_jeu[x - 1][y - 1] = type;
 }
 
@@ -408,7 +405,7 @@ int initialisation_du_jeu()
         printf("Tu va jouer contre <%s>  \n  Veuillez attendre le tour \n", nomAdversaire);
     }
     else
-        printf("Bien venu dans le jeu d'allignement de 3 pieces \n   Tu va jouer contre <%s> \n Veuillez attendre le tour \n", message_a_recevoir);
+        printf("Bien venu dans le jeu d'allignement de 3 pieces \n   Tu va jouerre <%s> \n Veuillez attendre le tour \n", message_a_recevoir);
     return 1;
 }
 
@@ -417,22 +414,6 @@ int initialisation_du_jeu()
 int placement_des_pieces()
 {
 
-    /** A compl�ter
-     ici c'est la phase de placement des pi�ces
-     le joueur propose un placement et met � jour la gril local apr�s
-     - la confirmation de son action (de placement local) par serveur (on mette X)
-     - la reconnaissance de l'action du jeu de l'adverssaire (selon
-       l'information retounrn�e par le serveur) (on Mette O)
-
-    retourne :
-    0 : en cas de probl�me de communication
-    1 : si il arrive � bien positionner sa 3 eme pi�ce
-    2 : le joueur arrive � aligner correctement ses trois pi�ces, ce joueur est alor vinqueur
-    3 : l'adversaire arrive � aligner ces 3 pi�ce, ou le joueur n'arrive pas
-        � exprimmer en trois tentive une placement correcte.
-        il est alor vinqueur et ce joueur �choue
-    4 : ADVERSAIRE DECONNECTE
-    **/
     char message_a_recevoir[LG_MESSAGE], message_a_envoyer[LG_MESSAGE];
     int x, y;
     int nb_pieces_placee = 0, nb_pieces_placee_adv = 0;
@@ -445,7 +426,7 @@ int placement_des_pieces()
             return 0;
         if (strcmp(message_a_recevoir, VEILLEZ_JOUER) == 0)
         {
-            printf("C\'est votre tour..\n");
+
             demander_placer_une_piece(nb_pieces_placee + 1, &x, &y);
             prepare_message(x, y, message_a_envoyer);
             etat_envoi = envoyer_message_au_serveur(socketDialogue, message_a_envoyer);
@@ -458,9 +439,6 @@ int placement_des_pieces()
             nb_pieces_placee++;
             mettre_a_jeur_gril('X', x, y);
             afficher_gril();
-            // attendre l'adversaire
-            //         etat_reception=recevoir_message_du_serveur(socketDialogue,message_a_recevoir);
-            //         if(etat_reception==0) return 0;
         }
         else if (strcmp(message_a_recevoir, MAUVAISE_MANIPULATION) == 0)
         {
@@ -496,21 +474,6 @@ int placement_des_pieces()
 
 int deplacement_des_pieces()
 {
-    /** A compl�ter
-     ici c'est la phase de deplacement des pi�ces
-     le joueur propose � chaque fois un deplacement et met � jour la gril local apr�s
-     - la cofirmation de son action (de deplacement local) par serveur
-     - la reconnaissance de l'action du jeu de l'adverssaire (selon
-       l'information retounrn�e par le serveur)
-
-    retourne :
-    0 : en cas de probl�me de communication
-    2 : le joueur arrive � aligner correctement ses trois pi�ces, ce joueur est alor vinqueur
-    3 : l'adversaire arrive � aligner ces 3 pi�ce, ou le joueur n'arrive pas
-        � exprimmer en trois tentive un deplacement correcte.
-        il est alor vinqueur et ce joueur �choue
-    4 : ADVERSAIRE DECONNECTE
-    **/
     char message_a_recevoir[LG_MESSAGE], message_a_envoyer[LG_MESSAGE];
     int xs, ys, xc, yc;
     while (true)
@@ -532,9 +495,6 @@ int deplacement_des_pieces()
             printf("Votre piece est bien deplacee..Attendez votre adversaire..\n");
             mettre_a_jeur_gril(xs, ys, xc, yc);
             afficher_gril();
-            // attendre l'adversaire
-            //         etat_reception=recevoir_message_du_serveur(socketDialogue,message_a_recevoir);
-            //         if(etat_reception==0) return 0;
         }
         else if (strcmp(message_a_recevoir, MAUVAISE_MANIPULATION) == 0)
         {
@@ -570,32 +530,27 @@ int deplacement_des_pieces()
 
 int main()
 {
-    int resultat = -1;
-    char corbeil;
+
     init_bib(); // initialiser la biblioth�que "WinSock"
-    while (resultat != 0)
+
+    initialisation_du_Gril();
+    afficher_gril();
+    demmnder_nom_joueur();
+    initialisation_du_jeu();
+    int resultat = placement_des_pieces();
+    if (resultat == 4)
+        printf("\nADVERSAIRE DECONNECTE\n");
+    if (resultat != 1)
+        afficher_scord(resultat);
+    else
     {
-        initialisation_du_Gril();
-        afficher_gril();
-        demmnder_nom_joueur();
-        initialisation_du_jeu();
-        resultat = placement_des_pieces();
+        resultat = deplacement_des_pieces();
         if (resultat == 4)
             printf("\nADVERSAIRE DECONNECTE\n");
-        if (resultat != 1)
-            afficher_scord(resultat);
-        else
-        {
-            resultat = deplacement_des_pieces();
-            if (resultat == 4)
-                printf("\nADVERSAIRE DECONNECTE\n");
-            afficher_scord(resultat);
-        }
-        printf("\n\n%d\n\nTAPEZ POUR CONTINUER..", resultat);
-        corbeil = getch();
+        afficher_scord(resultat);
     }
-    fermer_bib(); // fermmer la biblioth�que "WinSock"
-    // scanf("%d", &resultat);
+
+    fermer_bib();
     return 1;
 }
 /****************************************************************************************/

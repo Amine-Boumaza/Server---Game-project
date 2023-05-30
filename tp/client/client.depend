@@ -34,3 +34,11 @@
 	<stdlib.h>
 	<string.h>
 
+1682673463 source:c:\users\bouma\onedrive\desktop\reseau project\tp\client\main.cpp
+	<winsock2.h>
+	<ws2tcpip.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+
